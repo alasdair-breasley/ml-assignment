@@ -67,9 +67,19 @@ hist(pokemon_data_clean$percentage_male) # Vast majority of values are 50 theref
 pokemon_data_clean = pokemon_data_clean %>% 
   dplyr::mutate(height_m = if_else(is.na(height_m), median(height_m, na.rm = TRUE), height_m)) %>% # Impute height_m NAs with median 
   dplyr::mutate(weight_kg = if_else(is.na(weight_kg), median(weight_kg, na.rm = TRUE), weight_kg)) %>% # Impute weight_kg NAs with median 
-  dplyr::mutate(percentage_male = if_else(is.na(percentage_male), 50, percentage_male)) # Impute percentage male with mode (50%)
+  dplyr::mutate(percentage_male_cat = case_when(is.na(percentage_male) ~ "Genderless", 
+                                            percentage_male == 50 ~ "50/50",
+                                            percentage_male < 50 ~ "<50",
+                                            percentage_male > 50 ~ ">50")) %>% # Categorise percentage male 
+  dplyr::select(-percentage_male) # Remove percentage_male column 
 
 ```
 
+```{r}
+
+# Check for any NAs 
+any(is.na(pokemon_data_clean))
+
+```
 
 
