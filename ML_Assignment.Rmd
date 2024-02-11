@@ -1,0 +1,27 @@
+---
+title: "ML_Assignment"
+output: html_document
+---
+
+```{r setup, include = FALSE}
+
+library(dplyr)
+
+pokemon_data = read.csv("C:/Users/alasd/Documents/MDS/ML/Assignment/Assignment 2/pokemon.csv")
+
+```
+
+```{r}
+
+# Check for NAs 
+colSums(is.na(pokemon_data))
+
+```
+
+```{r}
+
+# Check column data types 
+sapply(pokemon_data, class)
+
+```
+
