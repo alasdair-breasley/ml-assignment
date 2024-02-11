@@ -39,3 +39,37 @@ pokemon_data_clean = pokemon_data %>%
 
 ```
 
+```{r}
+
+# Working out most appropriate imputation technique - height_m 
+hist(pokemon_data_clean$height_m) # Outliers present and not normally distributed therefore median better than mean cause less sensitive to outliers 
+
+```
+
+```{r}
+
+# Working out most appropriate imputation technique - weight_kg 
+hist(pokemon_data_clean$weight_kg) # Not normally distributed therefore median better than mean 
+
+```
+
+```{r}
+
+# Working out most appropriate imputation technique - percentage_male 
+hist(pokemon_data_clean$percentage_male) # Vast majority of values are 50 therefore mode makes most sense 
+
+```
+
+
+```{r}
+
+# Impute NA values 
+pokemon_data_clean = pokemon_data_clean %>% 
+  dplyr::mutate(height_m = if_else(is.na(height_m), median(height_m, na.rm = TRUE), height_m)) %>% # Impute height_m NAs with median 
+  dplyr::mutate(weight_kg = if_else(is.na(weight_kg), median(weight_kg, na.rm = TRUE), weight_kg)) %>% # Impute weight_kg NAs with median 
+  dplyr::mutate(percentage_male = if_else(is.na(percentage_male), 50, percentage_male)) # Impute percentage male with mode (50%)
+
+```
+
+
+
