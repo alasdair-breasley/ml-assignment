@@ -25,3 +25,17 @@ sapply(pokemon_data, class)
 
 ```
 
+```{r}
+
+# Initial data processing 
+pokemon_data_clean = pokemon_data %>% 
+  dplyr::select(-c(abilities, japanese_name, name)) %>% # Remove unneccessary columns 
+  dplyr::mutate(capture_rate = as.integer(if_else(capture_rate == "30 (Meteorite)255 (Core)", "30", capture_rate))) %>% # Fix character issue 
+  dplyr::mutate(generation = as.factor(generation)) %>% # Make generation a factor 
+  dplyr::mutate(is_legendary = as.factor(is_legendary)) %>% # Make is_legendary a factor 
+  dplyr::mutate(type1 = as.factor(type1)) %>% # Make type1 a factor 
+  dplyr::mutate(type2 = as.factor(type2)) %>% # Make type2 a factor 
+  dplyr::mutate(classfication = as.factor(classfication)) # Make classification a factor 
+
+```
+
