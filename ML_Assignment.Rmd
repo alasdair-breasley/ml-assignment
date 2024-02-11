@@ -71,6 +71,7 @@ pokemon_data_clean = pokemon_data_clean %>%
                                             percentage_male == 50 ~ "50/50",
                                             percentage_male < 50 ~ "<50",
                                             percentage_male > 50 ~ ">50")) %>% # Categorise percentage male 
+  dplyr::mutate(percentage_male_cat = as.factor(percentage_male_cat)) %>% # Make percentage_male_cat a factor 
   dplyr::select(-percentage_male) # Remove percentage_male column 
 
 ```
