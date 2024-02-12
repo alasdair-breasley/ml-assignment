@@ -7,7 +7,9 @@ output: html_document
 
 library(dplyr)
 
-pokemon_data = read.csv("C:/Users/alasd/Documents/MDS/ML/Assignment/Assignment 2/pokemon.csv")
+file = "https://raw.githubusercontent.com/ccscaiado/MLRepo/main/Assignment%202%20Datasets/Pokemon/pokemon.csv"
+
+pokemon_data = read.csv(file, header = TRUE)
 
 ```
 
@@ -84,6 +86,11 @@ pokemon_data_clean = pokemon_data_clean %>%
 
 # Check for any NAs 
 any(is.na(pokemon_data_clean))
+
+```
+```{r}
+
+# TODO: Collect data for newer generations, test model on newer generations 
 
 ```
 
