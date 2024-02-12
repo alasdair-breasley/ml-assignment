@@ -31,14 +31,13 @@ sapply(pokemon_data, class)
 
 # Initial data processing 
 pokemon_data_clean = pokemon_data %>% 
-  dplyr::select(-c(abilities, japanese_name, name, pokedex_number)) %>% # Remove unnecessary columns 
+  dplyr::select(-c(abilities, japanese_name, name, pokedex_number, type2)) %>% # Remove unnecessary columns - type2 because of data quality (Kaggle)
   dplyr::mutate(capture_rate = as.numeric(if_else(capture_rate == "30 (Meteorite)255 (Core)", "142.5", capture_rate))) %>% # Fix character issue 
   # Minior has a differing catch rate dependent on form based on if it is above or below 50% hp and therefore the expected value for catch rate is 
   # assumed to be (30 + 255) / 2 = 142.5 
   dplyr::mutate(generation = as.factor(generation)) %>% # Make generation a factor 
   dplyr::mutate(is_legendary = as.factor(is_legendary)) %>% # Make is_legendary a factor 
   dplyr::mutate(type1 = as.factor(type1)) %>% # Make type1 a factor 
-  dplyr::mutate(type2 = as.factor(type2)) %>% # Make type2 a factor 
   dplyr::mutate(classfication = as.factor(classfication)) # Make classification a factor 
 
 ```
