@@ -6,6 +6,9 @@ output: html_document
 ```{r setup, include = FALSE}
 
 library(dplyr)
+library(ggplot2)
+library(GGally)
+library(corrplot)
 
 file = "https://raw.githubusercontent.com/ccscaiado/MLRepo/main/Assignment%202%20Datasets/Pokemon/pokemon.csv"
 
@@ -38,7 +41,8 @@ pokemon_data_clean = pokemon_data %>%
   dplyr::mutate(generation = as.factor(generation)) %>% # Make generation a factor 
   dplyr::mutate(is_legendary = as.factor(is_legendary)) %>% # Make is_legendary a factor 
   dplyr::mutate(type1 = as.factor(type1)) %>% # Make type1 a factor 
-  dplyr::mutate(classfication = as.factor(classfication)) # Make classification a factor 
+  dplyr::rename(classification = classfication) %>% 
+  dplyr::mutate(classification = as.factor(classification)) # Make classification a factor 
 
 ```
 
@@ -87,6 +91,30 @@ pokemon_data_clean = pokemon_data_clean %>%
 any(is.na(pokemon_data_clean))
 
 ```
+
+```{r}
+
+# Remove categorical variables 
+pokemon_data_pairs = pokemon_data_clean %>% 
+  dplyr::select(-c(classification, type1, generation, is_legendary, percentage_male_cat))
+
+# Prepare data 
+pokemon_data_pairs_matrix = cor(pokemon_data_pairs)
+
+# Create correlation heatmap 
+corrplot(pokemon_data_pairs_matrix, method = "color", type = "upper", order = "hclust",
+         tl.col = "black", tl.srt = 90)
+
+# capture_rate is strongly negatively correlated with base_total 
+# defense, sp_defense, attack, hp positively correlated with base_total 
+# against_ghost negatively correlated with against fight 
+# against_dark positively correlated with against_ghost 
+
+
+```
+
+
+
 ```{r}
 
 # TODO: Collect data for newer generations, test model on newer generations 
