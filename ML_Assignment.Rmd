@@ -113,6 +113,13 @@ corrplot(pokemon_data_pairs_matrix, method = "color", type = "upper", order = "h
 
 ```
 
+```{r}
+
+# Create correlation heatmap with coefficients 
+corrplot(pokemon_data_pairs_matrix, method = "color", type = "upper", order = "hclust",
+         tl.col = "black", tl.srt = 90, addCoef.col = "black", number.cex = 0.5)
+
+```
 
 
 ```{r}
