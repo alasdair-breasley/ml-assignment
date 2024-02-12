@@ -9,6 +9,9 @@ library(dplyr)
 library(ggplot2)
 library(GGally)
 library(corrplot)
+library(skimr)
+library(knitr)
+library(kableExtra)
 
 file = "https://raw.githubusercontent.com/ccscaiado/MLRepo/main/Assignment%202%20Datasets/Pokemon/pokemon.csv"
 
@@ -42,7 +45,8 @@ pokemon_data_clean = pokemon_data %>%
   dplyr::mutate(is_legendary = as.factor(is_legendary)) %>% # Make is_legendary a factor 
   dplyr::mutate(type1 = as.factor(type1)) %>% # Make type1 a factor 
   dplyr::rename(classification = classfication) %>% 
-  dplyr::mutate(classification = as.factor(classification)) # Make classification a factor 
+  dplyr::mutate(classification = as.factor(classification)) %>% # Make classification a factor 
+  dplyr::select(-classification) # TODO: Decide to keep classification or not. Currently removed due to many small classes 
 
 ```
 
@@ -96,7 +100,7 @@ any(is.na(pokemon_data_clean))
 
 # Remove categorical variables 
 pokemon_data_pairs = pokemon_data_clean %>% 
-  dplyr::select(-c(classification, type1, generation, is_legendary, percentage_male_cat))
+  dplyr::select(-c(type1, generation, is_legendary, percentage_male_cat))
 
 # Prepare data 
 pokemon_data_pairs_matrix = cor(pokemon_data_pairs)
@@ -118,6 +122,44 @@ corrplot(pokemon_data_pairs_matrix, method = "color", type = "upper", order = "h
 # Create correlation heatmap with coefficients 
 corrplot(pokemon_data_pairs_matrix, method = "color", type = "upper", order = "hclust",
          tl.col = "black", tl.srt = 90, addCoef.col = "black", number.cex = 0.5)
+
+```
+
+```{r}
+
+# Summarise dataset 
+summary(pokemon_data_clean)
+
+```
+
+```{r}
+
+# Summarise dataset 
+skim(pokemon_data_clean)
+
+```
+
+```{r}
+
+# Create subset with only numeric variables 
+pokemon_data_clean_numeric = pokemon_data_clean %>% 
+  dplyr::select(-c(type1, generation, is_legendary, percentage_male_cat))
+
+# Create numeric variables summary table 
+kable(summary(pokemon_data_clean_numeric)) %>%
+  kable_styling(bootstrap_options = c("striped", "hover"))
+
+```
+
+```{r}
+
+# Create subset with only categorical variables 
+pokemon_data_clean_categorical = pokemon_data_clean %>% 
+  dplyr::select(c(type1, generation, is_legendary, percentage_male_cat))
+
+# Create categorical variables summary table 
+kable(summary(pokemon_data_clean_categorical)) %>%
+  kable_styling(bootstrap_options = c("striped", "hover"))
 
 ```
 
