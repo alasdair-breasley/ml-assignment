@@ -186,6 +186,27 @@ training_data = pokemon_data_clean[-indices,]
 
 ```{r}
 
+# Define mtry values to run for 
+tuneGrid = expand.grid(mtry = c(1:35))
+
+# Specify 5-fold cross-validation 
+fitControl = trainControl(method = "cv", 
+                          number = 5)
+
+# Perform 5-fold cross-validation for Random Forest model 
+model_rf = train(type1 ~ ., 
+                 data = training_data, 
+                 method = "rf", 
+                 tuneGrid = tuneGrid, 
+                 trControl = fitControl, 
+                 metric = "Accuracy")
+
+print(model_rf)
+
+```
+
+```{r}
+
 # TODO: Collect data for newer generations, test model on newer generations 
 
 ```
