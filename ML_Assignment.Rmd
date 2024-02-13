@@ -186,14 +186,14 @@ training_data = pokemon_data_clean[-indices,]
 
 ```{r}
 
-# Define mtry values to run for 
+# Define mtry values to run for tuning 
 tuneGrid = expand.grid(mtry = c(1:35))
 
 # Specify 5-fold cross-validation 
 fitControl = trainControl(method = "cv", 
                           number = 5)
 
-# Perform 5-fold cross-validation for Random Forest model 
+# Perform 5-fold cross-validation and mtry tuning 
 model_rf = train(type1 ~ ., 
                  data = training_data, 
                  method = "rf", 
@@ -211,6 +211,27 @@ print(model_rf)
 predictions = predict(model_rf, newdata = test_data)
 # Print confusion matrix 
 confusionMatrix(predictions, test_data$type1)
+
+```
+
+```{r}
+
+# Set seed 
+set.seed(123)
+
+# Loop through ntrees values and tune 
+for (ntrees in c(500, 1000, 2000, 4000)) {
+  
+  # Create model version based on ntrees value 
+  model_rf_nt = randomForest(type1 ~ ., data = training_data, ntree = ntrees, mtry = model_rf$bestTune[[1]])
+  
+  # Predict type1 values for test data 
+  predictions = predict(model_rf_nt, newdata = test_data)
+  
+  # Print accuracy for each model version 
+  print(round(confusionMatrix(predictions, test_data$type1)$overall[[1]], 2))
+
+}
 
 ```
 
