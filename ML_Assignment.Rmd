@@ -219,11 +219,14 @@ confusionMatrix(predictions, test_data$type1)
 # Set seed 
 set.seed(123)
 
+# Best mtry value 
+mtry = model_rf$bestTune[[1]]
+
 # Loop through ntrees values and tune 
 for (ntrees in c(500, 1000, 2000, 4000)) {
   
   # Create model version based on ntrees value 
-  model_rf_nt = randomForest(type1 ~ ., data = training_data, ntree = ntrees, mtry = model_rf$bestTune[[1]])
+  model_rf_nt = randomForest(type1 ~ ., data = training_data, ntree = ntrees, mtry = mtry)
   
   # Predict type1 values for test data 
   predictions = predict(model_rf_nt, newdata = test_data)
@@ -232,6 +235,18 @@ for (ntrees in c(500, 1000, 2000, 4000)) {
   print(round(confusionMatrix(predictions, test_data$type1)$overall[[1]], 2))
 
 }
+
+```
+
+```{r}
+
+# Set seed 
+set.seed(123)
+
+model_rf = randomForest(type1 ~ ., data = training_data, ntree = 500, mtry = mtry)
+
+# Assess feature importance 
+importance(model_rf)
 
 ```
 
