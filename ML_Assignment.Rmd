@@ -207,6 +207,15 @@ print(model_rf)
 
 ```{r}
 
+# Predict type1 values for test data 
+predictions = predict(model_rf, newdata = test_data)
+# Print confusion matrix 
+confusionMatrix(predictions, test_data$type1)
+
+```
+
+```{r}
+
 # TODO: Collect data for newer generations, test model on newer generations 
 
 ```
