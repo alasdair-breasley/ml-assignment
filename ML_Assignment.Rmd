@@ -12,6 +12,10 @@ library(corrplot)
 library(skimr)
 library(knitr)
 library(kableExtra)
+library(ggparty)
+library(rpart)
+library(caret)
+library(randomForest)
 
 file = "https://raw.githubusercontent.com/ccscaiado/MLRepo/main/Assignment%202%20Datasets/Pokemon/pokemon.csv"
 
@@ -163,6 +167,22 @@ kable(summary(pokemon_data_clean_categorical)) %>%
 
 ```
 
+```{r}
+
+# Set seed 
+set.seed(123)
+
+# Proportion of data to partition into test split 
+test_split = 0.25
+
+# Sample indices based on the test split proportion 
+indices = sample(1:nrow(pokemon_data_clean), size = round(nrow(pokemon_data_clean) * test_split))
+# Create test set 
+test_data = pokemon_data_clean[indices,]
+# Create training set 
+training_data = pokemon_data_clean[-indices,]
+
+```
 
 ```{r}
 
