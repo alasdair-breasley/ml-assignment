@@ -21,6 +21,8 @@ file = "https://raw.githubusercontent.com/ccscaiado/MLRepo/main/Assignment%202%2
 
 pokemon_data = read.csv(file, header = TRUE)
 
+seed = 123
+
 ```
 
 ```{r}
@@ -51,6 +53,7 @@ pokemon_data_clean = pokemon_data %>%
   dplyr::rename(classification = classfication) %>% 
   dplyr::mutate(classification = as.factor(classification)) %>% # Make classification a factor 
   dplyr::select(-c(classification, is_legendary)) # TODO: Decide to keep classification or not. Currently removed due to many small classes 
+  # Remove classification based on it having too many categories (prohibitively long run time for random forest) 
   # Remove is_legendary based on feature importance being very low and only a very small reduction in accuracy once removed 
 
 ```
@@ -171,7 +174,7 @@ kable(summary(pokemon_data_clean_categorical)) %>%
 ```{r}
 
 # Set seed 
-set.seed(123)
+set.seed(seed)
 
 # Proportion of data to partition into test split 
 test_split = 0.25
@@ -187,6 +190,40 @@ training_data = pokemon_data_clean[-indices,]
 
 ```{r}
 
+# Define cp values to run for tuning 
+tuneGrid = expand.grid(cp = seq(0.001, 0.1, by = 0.001))
+
+# Specify 5-fold cross-validation 
+fitControl = trainControl(method = "cv", 
+                          number = 5)
+
+# Set seed 
+set.seed(seed)
+
+# Perform 5-fold cross-validation 
+model_cart = train(type1 ~ .,
+                   data = training_data,
+                   method = "rpart",
+                   tuneGrid = tuneGrid,
+                   trControl = fitControl)
+
+plot(as.party(model_cart$finalModel))
+
+print(model_cart)
+
+```
+
+```{r}
+
+# Predict type1 values for test data 
+predictions = predict(model_cart, newdata = test_data)
+# Print confusion matrix 
+confusionMatrix(predictions, test_data$type1)
+
+```
+
+```{r}
+
 # Define mtry values to run for tuning 
 tuneGrid = expand.grid(mtry = c(1:ncol(pokemon_data_clean)))
 
@@ -195,7 +232,7 @@ fitControl = trainControl(method = "cv",
                           number = 5)
 
 # Set seed 
-set.seed(123)
+set.seed(seed)
 
 # Perform 5-fold cross-validation and mtry tuning 
 model_rf = train(type1 ~ ., 
@@ -220,14 +257,14 @@ confusionMatrix(predictions, test_data$type1)
 
 ```{r}
 
-# Set seed 
-set.seed(123)
-
 # Best mtry value 
 mtry = model_rf$bestTune[[1]]
 
 # Loop through ntrees values and tune 
-for (ntrees in c(500, 1000, 2000, 4000)) {
+for (ntrees in c(500, 1000, 1500, 2000)) {
+  
+  # Set seed 
+  set.seed(seed)
   
   # Create model version based on ntrees value 
   model_rf_nt = randomForest(type1 ~ ., data = training_data, ntree = ntrees, mtry = mtry)
@@ -245,7 +282,7 @@ for (ntrees in c(500, 1000, 2000, 4000)) {
 ```{r}
 
 # Set seed 
-set.seed(123)
+set.seed(seed)
 
 model_rf = randomForest(type1 ~ ., data = training_data, ntree = 500, mtry = mtry)
 
