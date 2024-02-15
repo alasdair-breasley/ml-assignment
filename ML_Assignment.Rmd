@@ -42,7 +42,53 @@ sapply(pokemon_data, class)
 ```{r}
 
 # Initial data processing 
+
+# Assign height and weight values manually scraped from serebii 
 pokemon_data_clean = pokemon_data %>% 
+  dplyr::mutate(height_m = case_when(name == "Rattata" ~ 0.3, 
+                                     name == "Raticate" ~ 0.7,
+                                     name == "Raichu" ~ 0.7,
+                                     name == "Sandshrew" ~ 0.7,
+                                     name == "Sandslash" ~ 1.2,
+                                     name == "Vulpix" ~ 0.6,
+                                     name == "Ninetales" ~ 1.1,
+                                     name == "Diglett" ~ 0.2,
+                                     name == "Dugtrio" ~ 0.7,
+                                     name == "Meowth" ~ 0.4,
+                                     name == "Persian" ~ 1.1,
+                                     name == "Geodude" ~ 0.4,
+                                     name == "Graveler" ~ 1,
+                                     name == "Golem" ~ 1.7,
+                                     name == "Grimer" ~ 0.7,
+                                     name == "Muk" ~ 1,
+                                     name == "Exeggutor" ~ 10.9,
+                                     name == "Marowak" ~ 1,
+                                     name == "Hoopa" ~ 6.5,
+                                     name == "Lycanroc" ~ 0.8, 
+                                     TRUE ~ height_m)) %>% 
+  dplyr::mutate(weight_kg = case_when(name == "Rattata" ~ 3.5, 
+                                     name == "Raticate" ~ 18.5,
+                                     name == "Raichu" ~ 21,
+                                     name == "Sandshrew" ~ 40,
+                                     name == "Sandslash" ~ 55,
+                                     name == "Vulpix" ~ 9.9,
+                                     name == "Ninetales" ~ 19.9,
+                                     name == "Diglett" ~ 1,
+                                     name == "Dugtrio" ~ 66.6,
+                                     name == "Meowth" ~ 4.2,
+                                     name == "Persian" ~ 33,
+                                     name == "Geodude" ~ 20.3,
+                                     name == "Graveler" ~ 110,
+                                     name == "Golem" ~ 316,
+                                     name == "Grimer" ~ 42,
+                                     name == "Muk" ~ 52,
+                                     name == "Exeggutor" ~ 415.6,
+                                     name == "Marowak" ~ 34,
+                                     name == "Hoopa" ~ 490,
+                                     name == "Lycanroc" ~ 25, 
+                                     TRUE ~ weight_kg))
+
+pokemon_data_clean = pokemon_data_clean %>% 
   dplyr::select(-c(abilities, japanese_name, name, pokedex_number, type2)) %>% # Remove unnecessary columns - type2 because of data quality (Kaggle)
   dplyr::mutate(capture_rate = as.numeric(if_else(capture_rate == "30 (Meteorite)255 (Core)", "142.5", capture_rate))) %>% # Fix character issue 
   # Minior has a differing catch rate dependent on form based on if it is above or below 50% hp and therefore the expected value for catch rate is 
