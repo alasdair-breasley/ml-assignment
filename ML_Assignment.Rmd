@@ -21,7 +21,7 @@ file = "https://raw.githubusercontent.com/ccscaiado/MLRepo/main/Assignment%202%2
 
 pokemon_data = read.csv(file, header = TRUE)
 
-seed = 123
+seed = 1234
 
 ```
 
