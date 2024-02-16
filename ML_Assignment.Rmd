@@ -225,8 +225,12 @@ set.seed(seed)
 # Proportion of data to partition into test split 
 test_split = 0.25
 
-# Sample indices based on the test split proportion 
-indices = sample(1:nrow(pokemon_data_clean), size = round(nrow(pokemon_data_clean) * test_split))
+# Sample indices based on the test split proportion using stratified random sampling at the type1 level 
+# This ensures the test dataset includes a representative proportion of each type1 class from the full dataset 
+indices = createDataPartition(pokemon_data_clean$type1, p = test_split, list = FALSE, times = 1)
+
+#indices = sample(1:nrow(pokemon_data_clean), size = round(nrow(pokemon_data_clean) * test_split))
+
 # Create test set 
 test_data = pokemon_data_clean[indices,]
 # Create training set 
