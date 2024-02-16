@@ -21,7 +21,7 @@ file = "https://raw.githubusercontent.com/ccscaiado/MLRepo/main/Assignment%202%2
 
 pokemon_data = read.csv(file, header = TRUE)
 
-seed = 1234
+seed = 123456789
 
 ```
 
@@ -104,7 +104,7 @@ pokemon_data_clean = pokemon_data %>%
                                      name == "Grimer" ~ 1,
                                      name == "Muk" ~ 1,
                                      name == "Exeggutor" ~ 1,
-                                     name == "Marowak" ~ 45,
+                                     name == "Marowak" ~ 1,
                                      TRUE ~ 0)) %>% 
   dplyr::mutate(alolan_form_exists = as.factor(alolan_form_exists))
 
@@ -331,7 +331,7 @@ confusionMatrix(predictions, test_data$type1)
 mtry = model_rf$bestTune[[1]]
 
 # Loop through ntrees values and tune 
-for (ntrees in c(500, 1000, 1500, 2000)) {
+for (ntrees in c(500, 1000, 2000, 4000)) {
   
   # Set seed 
   set.seed(seed)
