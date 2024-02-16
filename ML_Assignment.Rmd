@@ -271,7 +271,7 @@ confusionMatrix(predictions, test_data$type1)
 ```{r}
 
 # Define mtry values to run for tuning 
-tuneGrid = expand.grid(mtry = c(1:ncol(pokemon_data_clean)))
+tuneGrid = expand.grid(mtry = c(1:((ncol(pokemon_data_clean) / 2) + 1)))
 
 # Specify 5-fold cross-validation 
 fitControl = trainControl(method = "cv", 
