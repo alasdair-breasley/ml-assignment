@@ -86,7 +86,27 @@ pokemon_data_clean = pokemon_data %>%
                                      name == "Marowak" ~ 45,
                                      name == "Hoopa" ~ 9,
                                      name == "Lycanroc" ~ 25, 
-                                     TRUE ~ weight_kg))
+                                     TRUE ~ weight_kg)) %>% 
+  dplyr::mutate(alolan_form_exists = case_when(name == "Rattata" ~ 1, 
+                                     name == "Raticate" ~ 1,
+                                     name == "Raichu" ~ 1,
+                                     name == "Sandshrew" ~ 1,
+                                     name == "Sandslash" ~ 1,
+                                     name == "Vulpix" ~ 1,
+                                     name == "Ninetales" ~ 1,
+                                     name == "Diglett" ~ 1,
+                                     name == "Dugtrio" ~ 1,
+                                     name == "Meowth" ~ 1,
+                                     name == "Persian" ~ 1,
+                                     name == "Geodude" ~ 1,
+                                     name == "Graveler" ~ 1,
+                                     name == "Golem" ~ 1,
+                                     name == "Grimer" ~ 1,
+                                     name == "Muk" ~ 1,
+                                     name == "Exeggutor" ~ 1,
+                                     name == "Marowak" ~ 45,
+                                     TRUE ~ 0)) %>% 
+  dplyr::mutate(alolan_form_exists = as.factor(alolan_form_exists))
 
 pokemon_data_clean = pokemon_data_clean %>% 
   dplyr::select(-c(abilities, japanese_name, name, pokedex_number, type2)) %>% # Remove unnecessary columns - type2 because of data quality (Kaggle)
@@ -98,7 +118,7 @@ pokemon_data_clean = pokemon_data_clean %>%
   dplyr::mutate(type1 = as.factor(type1)) %>% # Make type1 a factor 
   dplyr::rename(classification = classfication) %>% 
   dplyr::mutate(classification = as.factor(classification)) %>% # Make classification a factor 
-  dplyr::select(-c(classification, is_legendary)) # TODO: Decide to keep classification or not. Currently removed due to many small classes 
+  dplyr::select(-c(classification)) # TODO: Decide to keep classification or not. Currently removed due to many small classes 
   # Remove classification based on it having too many categories (prohibitively long run time for random forest) 
   # Remove is_legendary based on feature importance being very low and only a very small reduction in accuracy once removed 
 
@@ -154,7 +174,7 @@ any(is.na(pokemon_data_clean))
 
 # Remove categorical variables 
 pokemon_data_pairs = pokemon_data_clean %>% 
-  dplyr::select(-c(type1, generation, percentage_male_cat))
+  dplyr::select(-c(type1, generation, is_legendary, percentage_male_cat, alolan_form_exists))
 
 # Prepare data 
 pokemon_data_pairs_matrix = cor(pokemon_data_pairs)
@@ -197,7 +217,7 @@ skim(pokemon_data_clean)
 
 # Create subset with only numeric variables 
 pokemon_data_clean_numeric = pokemon_data_clean %>% 
-  dplyr::select(-c(type1, generation, percentage_male_cat))
+  dplyr::select(-c(type1, generation, is_legendary, percentage_male_cat, alolan_form_exists))
 
 # Create numeric variables summary table 
 kable(summary(pokemon_data_clean_numeric)) %>%
@@ -209,7 +229,7 @@ kable(summary(pokemon_data_clean_numeric)) %>%
 
 # Create subset with only categorical variables 
 pokemon_data_clean_categorical = pokemon_data_clean %>% 
-  dplyr::select(c(type1, generation, percentage_male_cat))
+  dplyr::select(c(type1, generation, is_legendary, percentage_male_cat, alolan_form_exists))
 
 # Create categorical variables summary table 
 kable(summary(pokemon_data_clean_categorical)) %>%
