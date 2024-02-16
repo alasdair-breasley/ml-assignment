@@ -343,7 +343,7 @@ for (ntrees in c(500, 1000, 2000, 4000)) {
   predictions = predict(model_rf_nt, newdata = test_data)
   
   # Print accuracy for each model version 
-  print(round(confusionMatrix(predictions, test_data$type1)$overall[[1]], 2))
+  print(round(confusionMatrix(predictions, test_data$type1)$overall[[1]], 3))
 
 }
 
