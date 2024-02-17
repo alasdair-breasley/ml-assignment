@@ -168,6 +168,7 @@ hist(pokemon_data_clean$weight_kg) # Not normally distributed therefore median b
 # Working out most appropriate imputation technique - percentage_male 
 hist(pokemon_data_clean$percentage_male) # Vast majority of values are 50 therefore mode makes most sense 
 
+# Distribution of Pokemon male sex percentage histogram 
 ggplot(data = pokemon_data_clean, aes(x = percentage_male)) +
   geom_histogram(aes(y = ..count..), binwidth = 10, colour = "darkblue", fill = "lightblue") +
   scale_x_continuous(breaks = breaks_width(25)) +
@@ -186,8 +187,8 @@ pokemon_data_clean = pokemon_data_clean %>%
   dplyr::mutate(weight_kg = if_else(is.na(weight_kg), median(weight_kg, na.rm = TRUE), weight_kg)) %>% # Impute weight_kg NAs with median 
   dplyr::mutate(percentage_male_cat = case_when(is.na(percentage_male) ~ "Genderless", 
                                             percentage_male == 50 ~ "50/50",
-                                            percentage_male < 50 ~ "<50",
-                                            percentage_male > 50 ~ ">50")) %>% # Categorise percentage male 
+                                            percentage_male < 50 ~ "< 50",
+                                            percentage_male > 50 ~ "> 50")) %>% # Categorise percentage male 
   dplyr::mutate(percentage_male_cat = as.factor(percentage_male_cat)) %>% # Make percentage_male_cat a factor 
   dplyr::select(-percentage_male) # Remove percentage_male column 
 
@@ -204,6 +205,7 @@ any(is.na(pokemon_data_clean))
 
 ```{r}
 
+# Frequency of Pokemon types bar chart 
 ggplot(data = pokemon_data_clean, aes(x = type1, fill = type1)) +
   geom_bar(colour = "black") +
   geom_hline(yintercept = 0, colour = "black", size = 0.5) +
@@ -214,6 +216,25 @@ ggplot(data = pokemon_data_clean, aes(x = type1, fill = type1)) +
 
 ```
 
+```{r}
+
+# Create subset with only categorical variables 
+pokemon_data_clean_categorical = pokemon_data_clean %>% 
+  dplyr::select(c(type1, generation, is_legendary, percentage_male_cat, alolan_form_exists))
+
+# Loop through categorical variables and plot 
+for (i in 1:ncol(pokemon_data_clean_categorical)) {
+  
+  print(ggplot(data = pokemon_data_clean_categorical, aes(x = pokemon_data_clean_categorical[[i]], fill = pokemon_data_clean_categorical[[i]])) +
+    geom_bar(colour = "black") +
+    geom_hline(yintercept = 0, colour = "black", size = 0.5) +
+    labs(x = colnames(pokemon_data_clean_categorical)[i], y = "Count", title = "") +
+    theme(panel.border = element_rect(colour = "black", fill = NA, size = 0.5), axis.text = element_text(color = "black"), 
+          axis.text.x = element_text(angle = 90, vjust = 0.35, color = "black"), legend.position = "none"))
+  
+}
+
+```
 
 ```{r}
 
