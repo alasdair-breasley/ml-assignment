@@ -27,6 +27,18 @@ seed = 123456789
 
 ```{r}
 
+# Check unique combinations of type1 and type2 to work out if it is feasible to predict unique combinations as opposed to type1 
+pokemon_data %>% 
+  dplyr::mutate(type2 = if_else(type1 == type2, "", type2)) %>% 
+  group_by(type1, type2) %>% 
+  summarise(count = n(), .groups = "drop") %>% 
+  dplyr::arrange(desc(count), type1, type2) 
+
+```
+
+
+```{r}
+
 # Check for NAs 
 colSums(is.na(pokemon_data))
 
