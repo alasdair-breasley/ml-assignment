@@ -216,7 +216,7 @@ ggplot(data = pokemon_data_clean, aes(x = type1, fill = type1)) +
 
 ```
 
-```{r}
+```{r warning = FALSE}
 
 # Create subset with only categorical variables 
 pokemon_data_clean_categorical = pokemon_data_clean %>% 
@@ -235,6 +235,25 @@ for (i in 1:ncol(pokemon_data_clean_categorical)) {
 }
 
 ```
+
+```{r warning = FALSE}
+
+# Create subset with only numeric variables 
+pokemon_data_clean_numeric = pokemon_data_clean %>% 
+  dplyr::select(-c(type1, generation, is_legendary, percentage_male_cat, alolan_form_exists))
+
+# Loop through numeric variables and plot 
+for (i in 1:ncol(pokemon_data_clean_numeric)) {
+  
+  print(ggplot(data = pokemon_data_clean_numeric, aes(x = pokemon_data_clean_numeric[[i]])) +
+          geom_histogram(aes(y = ..count..), colour = "darkblue", fill = "lightblue", bins = 16) +
+          labs(x = colnames(pokemon_data_clean_numeric)[i], y = "Count", title = "") +
+          theme(panel.border = element_rect(colour = "black", fill = NA, size = 0.5), axis.text = element_text(color = "black")))
+  
+}
+
+```
+
 
 ```{r}
 
