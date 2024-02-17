@@ -7,6 +7,7 @@ output: html_document
 
 library(dplyr)
 library(ggplot2)
+library(scales)
 library(GGally)
 library(corrplot)
 library(skimr)
@@ -166,6 +167,13 @@ hist(pokemon_data_clean$weight_kg) # Not normally distributed therefore median b
 
 # Working out most appropriate imputation technique - percentage_male 
 hist(pokemon_data_clean$percentage_male) # Vast majority of values are 50 therefore mode makes most sense 
+
+ggplot(data = pokemon_data_clean, aes(x = percentage_male)) +
+  geom_histogram(aes(y = ..count..), binwidth = 10, colour = "darkblue", fill = "lightblue") +
+  scale_x_continuous(breaks = breaks_width(25)) +
+  scale_y_continuous(breaks = breaks_width(50)) +
+  labs(x = "Percentage Male", y = "Count", title = "Distribution of Pokemon Male Sex Percentage - Generations 1 to 7") +
+  theme(panel.border = element_rect(colour = "black", fill = NA, size = 0.5), axis.text = element_text(color = "black"))
 
 ```
 
