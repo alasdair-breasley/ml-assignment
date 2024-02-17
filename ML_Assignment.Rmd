@@ -204,6 +204,19 @@ any(is.na(pokemon_data_clean))
 
 ```{r}
 
+ggplot(data = pokemon_data_clean, aes(x = type1, fill = type1)) +
+  geom_bar(colour = "black") +
+  geom_hline(yintercept = 0, colour = "black", size = 0.5) +
+  scale_y_continuous(breaks = breaks_width(10)) +
+  labs(x = "Pokemon Type", y = "Count", title = "Frequency of Pokemon Types - Generation 1 to 7") +
+  theme(panel.border = element_rect(colour = "black", fill = NA, size = 0.5), axis.text = element_text(color = "black"), 
+        axis.text.x = element_text(angle = 90, vjust = 0.35, color = "black"), legend.position = "none")
+
+```
+
+
+```{r}
+
 # Remove categorical variables 
 pokemon_data_pairs = pokemon_data_clean %>% 
   dplyr::select(-c(type1, generation, is_legendary, percentage_male_cat, alolan_form_exists))
