@@ -23,19 +23,9 @@ pokemon_data = read.csv(file, header = TRUE)
 
 seed = 123456789
 
-```
-
-```{r}
-
-# Check unique combinations of type1 and type2 to work out if it is feasible to predict unique combinations as opposed to type1 
-pokemon_data %>% 
-  dplyr::mutate(type2 = if_else(type1 == type2, "", type2)) %>% 
-  group_by(type1, type2) %>% 
-  summarise(count = n(), .groups = "drop") %>% 
-  dplyr::arrange(desc(count), type1, type2) 
+type_combinations_flag = TRUE
 
 ```
-
 
 ```{r}
 
@@ -53,10 +43,32 @@ sapply(pokemon_data, class)
 
 ```{r}
 
+# Check unique combinations of type1 and type2 to work out if it is feasible to predict unique combinations as opposed to type1 
+pokemon_data %>% 
+  dplyr::mutate(type2 = if_else(type1 == type2, "", type2)) %>% 
+  group_by(type1, type2) %>% 
+  summarise(count = n(), .groups = "drop") %>% 
+  dplyr::arrange(desc(count), type1, type2) 
+
+```
+
+```{r}
+
+pokemon_data_clean = pokemon_data
+
 # Initial data processing 
+if (type_combinations_flag) {
+  pokemon_data_clean = pokemon_data %>% 
+    dplyr::mutate(type2 = if_else(type1 == type2, "", type2)) %>% 
+    dplyr::mutate(type1 = case_when(type1 == "normal" & type2 == "flying" ~ "normal-flying",
+                                    type1 == "grass" & type2 == "poison" ~ "grass-poison",
+                                    type1 == "bug" & type2 == "flying" ~ "bug-flying",
+                                    type1 == "bug" & type2 == "poison" ~ "bug-poison",
+                                    TRUE ~ type1)) 
+}
 
 # Assign height and weight values manually scraped from serebii 
-pokemon_data_clean = pokemon_data %>% 
+pokemon_data_clean = pokemon_data_clean %>% 
   dplyr::mutate(height_m = case_when(name == "Rattata" ~ 0.3, 
                                      name == "Raticate" ~ 0.7,
                                      name == "Raichu" ~ 0.8,
