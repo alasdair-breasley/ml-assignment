@@ -288,6 +288,18 @@ for (i in 1:ncol(pokemon_data_clean_numeric)) {
 
 ```
 
+```{r}
+
+# Distribution of Normal-type damage multipliers histogram 
+ggplot(data = pokemon_data_clean, aes(x = against_normal)) +
+  geom_histogram(aes(y = ..count..), colour = "darkblue", fill = "lightblue", bins = 16) +
+  scale_x_continuous(breaks = breaks_width(0.25)) +
+  scale_y_continuous(breaks = breaks_width(50)) +
+  labs(x = "Damage Multipliers Against Normal-type Damage", y = "Count", title = "Distribution of Normal-type Damage Multipliers - Generations 1 to 7") +
+  theme(panel.border = element_rect(colour = "black", fill = NA, size = 0.5), axis.text = element_text(color = "black"))
+
+```
+
 
 ```{r}
 
