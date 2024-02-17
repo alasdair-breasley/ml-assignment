@@ -57,18 +57,8 @@ pokemon_data %>%
 
 pokemon_data_clean = pokemon_data
 
-# Initial data processing 
-if (type_combinations_flag) {
-  pokemon_data_clean = pokemon_data %>% 
-    dplyr::mutate(type2 = if_else(type1 == type2, "", type2)) %>% 
-    dplyr::mutate(type1 = case_when(type1 == "normal" & type2 == "flying" ~ "normal-flying",
-                                    type1 == "grass" & type2 == "poison" ~ "grass-poison",
-                                    type1 == "bug" & type2 == "flying" ~ "bug-flying",
-                                    type1 == "bug" & type2 == "poison" ~ "bug-poison",
-                                    TRUE ~ type1)) 
-}
-
-# Assign height and weight values manually scraped from serebii 
+# Assign height, weight, and type2 values manually scraped from serebii 
+# Add Alolan version exists flag 
 pokemon_data_clean = pokemon_data_clean %>% 
   dplyr::mutate(height_m = case_when(name == "Rattata" ~ 0.3, 
                                      name == "Raticate" ~ 0.7,
@@ -112,6 +102,27 @@ pokemon_data_clean = pokemon_data_clean %>%
                                      name == "Hoopa" ~ 9,
                                      name == "Lycanroc" ~ 25, 
                                      TRUE ~ weight_kg)) %>% 
+  dplyr::mutate(type2 = case_when(name == "Rattata" ~ "", 
+                                     name == "Raticate" ~ "",
+                                     name == "Raichu" ~ "",
+                                     name == "Sandshrew" ~ "",
+                                     name == "Sandslash" ~ "",
+                                     name == "Vulpix" ~ "",
+                                     name == "Ninetales" ~ "",
+                                     name == "Diglett" ~ "",
+                                     name == "Dugtrio" ~ "",
+                                     name == "Meowth" ~ "",
+                                     name == "Persian" ~ "",
+                                     name == "Geodude" ~ type2,
+                                     name == "Graveler" ~ type2,
+                                     name == "Golem" ~ type2,
+                                     name == "Grimer" ~ "",
+                                     name == "Muk" ~ "",
+                                     name == "Exeggutor" ~ type2,
+                                     name == "Marowak" ~ "",
+                                     name == "Hoopa" ~ type2,
+                                     name == "Lycanroc" ~ type2, 
+                                     TRUE ~ type2)) %>% 
   dplyr::mutate(alolan_form_exists = case_when(name == "Rattata" ~ 1, 
                                      name == "Raticate" ~ 1,
                                      name == "Raichu" ~ 1,
@@ -132,6 +143,29 @@ pokemon_data_clean = pokemon_data_clean %>%
                                      name == "Marowak" ~ 1,
                                      TRUE ~ 0)) %>% 
   dplyr::mutate(alolan_form_exists = as.factor(alolan_form_exists))
+
+# Post Alolan fix 
+# Check unique combinations of type1 and type2 to work out if it is feasible to predict unique combinations as opposed to type1 
+pokemon_data_clean %>% 
+  dplyr::mutate(type2 = if_else(type1 == type2, "", type2)) %>% 
+  group_by(type1, type2) %>% 
+  summarise(count = n(), .groups = "drop") %>% 
+  dplyr::arrange(desc(count), type1, type2) 
+
+# Initial data processing 
+if (type_combinations_flag) {
+  pokemon_data_clean = pokemon_data_clean %>% 
+    dplyr::mutate(type2 = if_else(type1 == type2, "", type2)) %>% 
+    dplyr::mutate(type1 = case_when(type1 == "normal" & type2 == "flying" ~ "normal-flying",
+                                    type1 == "grass" & type2 == "poison" ~ "grass-poison",
+                                    type1 == "bug" & type2 == "flying" ~ "bug-flying",
+                                    type1 == "bug" & type2 == "poison" ~ "bug-poison",
+                                    TRUE ~ type1)) 
+}
+
+```
+
+```{r}
 
 pokemon_data_clean = pokemon_data_clean %>% 
   dplyr::select(-c(abilities, japanese_name, name, pokedex_number, type2)) %>% # Remove unnecessary columns - type2 because of data quality (Kaggle)
