@@ -308,7 +308,8 @@ pokemon_data_pairs = pokemon_data_clean %>%
   dplyr::select(-c(type1, generation, is_legendary, percentage_male_cat, alolan_form_exists))
 
 # Prepare data 
-pokemon_data_pairs_matrix = cor(pokemon_data_pairs)
+# Use Spearman's Rank Correlation Coefficient because the data is not normally distributed 
+pokemon_data_pairs_matrix = cor(pokemon_data_pairs, method = "spearman")
 
 # Create correlation heatmap 
 corrplot(pokemon_data_pairs_matrix, method = "color", type = "upper", order = "hclust",
