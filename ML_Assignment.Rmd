@@ -338,6 +338,31 @@ summary(pokemon_data_clean)
 
 ```
 
+
+```{r}
+
+# Summarise numeric variables and export to csv 
+numeric_summary_data = summary(pokemon_data_clean_numeric)
+
+numeric_summary_df = data.frame(matrix(ncol = length(numeric_summary_data) / 6, nrow = 6))
+
+for (i in 1:(length(summary_data) / 6)) {
+  
+  numeric_summary_df[, i] = summary_data[(1 + (6 * (i - 1))):((1 + (6 * (i - 1))) + 5)]
+  
+}
+
+colnames(numeric_summary_df) = names(pokemon_data_clean_numeric)
+
+numeric_summary_df_clean = as.data.frame(lapply(numeric_summary_df, function(x) gsub(".*:", "", x)))
+
+rownames(numeric_summary_df_clean) <- c("Min.", "1st Qu.", "Median", "Mean", "3rd Qu.", "Max.")
+
+# Write the summary data frame to a CSV file
+#write.csv(df_modified, "summary_output.csv", row.names = TRUE)
+
+```
+
 ```{r}
 
 # Summarise dataset 
