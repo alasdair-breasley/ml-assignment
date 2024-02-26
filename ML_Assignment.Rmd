@@ -502,10 +502,28 @@ for (ntrees in c(500, 1000, 2000, 4000)) {
   
   # Print accuracy for each model version 
   print(round(confusionMatrix(predictions, test_data$type1)$overall[[1]], 3))
+  
+  if (ntrees == 1000) { 
+    
+    cm = confusionMatrix(predictions, test_data$type1)$table
+    
+    }
 
 }
 
 ```
+
+```{r}
+
+# # Write confusion matrix to csv 
+# cm = confusionMatrix(predictions, test_data$type1)$table
+# 
+# df_1 = as.data.frame(cm)
+# 
+# write.csv(df_1, "cm_dt4.csv", row.names = TRUE)
+
+```
+
 
 ```{r}
 
