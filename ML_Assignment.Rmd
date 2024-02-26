@@ -208,7 +208,8 @@ ggplot(data = pokemon_data_clean, aes(x = percentage_male)) +
   scale_x_continuous(breaks = breaks_width(25)) +
   scale_y_continuous(breaks = breaks_width(50)) +
   labs(x = "Percentage Male", y = "Count", title = "Distribution of Pokemon Male Sex Percentage - Generations 1 to 7") +
-  theme(panel.border = element_rect(colour = "black", fill = NA, size = 0.5), axis.text = element_text(color = "black"))
+  theme(panel.border = element_rect(colour = "black", fill = NA, size = 0.5), axis.text = element_text(color = "black", size = 12),
+        axis.title = element_text(size = 14), plot.title = element_text(size = 14, face = "bold"))
 
 ```
 
@@ -243,7 +244,8 @@ ggplot(data = pokemon_data_clean, aes(x = type1, fill = type1)) +
   geom_hline(yintercept = 0, colour = "black", size = 0.5) +
   scale_y_continuous(breaks = breaks_width(10)) +
   labs(x = "Pokemon Type", y = "Count", title = "Frequency of Pokemon Types - Generation 1 to 7") +
-  theme(panel.border = element_rect(colour = "black", fill = NA, size = 0.5), axis.text = element_text(color = "black"), 
+  theme(panel.border = element_rect(colour = "black", fill = NA, size = 0.5), axis.text = element_text(color = "black", size = 12),
+        axis.title = element_text(size = 14), plot.title = element_text(size = 14, face = "bold"),
         axis.text.x = element_text(angle = 90, vjust = 0.35, color = "black"), legend.position = "none")
 
 ```
@@ -294,7 +296,8 @@ ggplot(data = pokemon_data_clean, aes(x = against_normal)) +
   scale_x_continuous(breaks = breaks_width(0.25)) +
   scale_y_continuous(breaks = breaks_width(50)) +
   labs(x = "Damage Multipliers Against Normal-type Damage", y = "Count", title = "Distribution of Normal-type Damage Multipliers - Generations 1 to 7") +
-  theme(panel.border = element_rect(colour = "black", fill = NA, size = 0.5), axis.text = element_text(color = "black"))
+  theme(panel.border = element_rect(colour = "black", fill = NA, size = 0.5), axis.text = element_text(color = "black", size = 12),
+        axis.title = element_text(size = 14), plot.title = element_text(size = 14, face = "bold"))
 
 ```
 
