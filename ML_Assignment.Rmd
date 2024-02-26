@@ -217,8 +217,6 @@ ggplot(data = pokemon_data_clean, aes(x = percentage_male)) +
 
 # Impute NA values 
 pokemon_data_clean = pokemon_data_clean %>% 
-  dplyr::mutate(height_m = if_else(is.na(height_m), median(height_m, na.rm = TRUE), height_m)) %>% # Impute height_m NAs with median 
-  dplyr::mutate(weight_kg = if_else(is.na(weight_kg), median(weight_kg, na.rm = TRUE), weight_kg)) %>% # Impute weight_kg NAs with median 
   dplyr::mutate(percentage_male_cat = case_when(is.na(percentage_male) ~ "Genderless", 
                                             percentage_male == 50 ~ "50/50",
                                             percentage_male < 50 ~ "< 50",
